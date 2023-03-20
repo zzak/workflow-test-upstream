@@ -8,10 +8,24 @@ jobs:
       - name: trigger
         env:
           GH_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
-        run: |
-          gh auth login
-          gh workflow run accept.yml \
-            -f ref=${{ github.ref }} \
-            -f ref_name=${{ github.ref_name }} \
-            -f ref_type=${{ github.ref_type }} \
-            -R zzak/workflow-test
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.TRIGGER_TOKEN }}
+          script: |
+            try {
+              const result = await github.rest.actions.createWorkflowDispatch({
+                owner: 'zzak',
+                repo: 'workflow-test',
+                workflow_id: 'accept.yml',
+                ref: 'main',
+                inputs: {
+                  ref: ${{ github.ref }},
+                  ref_name: ${{ github.ref_name }},
+                  ref_type: ${{ github.ref_type }}
+                },
+              })
+              console.log(result);
+            } catch(error) {
+              console.error(error);
+              core.setFailed(error);
+            }
