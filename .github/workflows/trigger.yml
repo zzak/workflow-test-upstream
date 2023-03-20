@@ -9,6 +9,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
         run: |
+          gh auth login
           gh workflow run accept.yml \
             -f ref=${{ github.ref }} \
             -f ref_name=${{ github.ref_name }} \
