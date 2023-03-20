@@ -1,0 +1,13 @@
+on:
+  push:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      run: |
+        gh workflow run accept.yml \
+          -f ref=${{ github.ref }} \
+          -f ref_name=${{ github.ref_name }} \
+          -f ref_type=${{ github.ref_type }} \
+          -R zzak/workflow-test
