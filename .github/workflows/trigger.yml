@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: trigger
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
         run: |
           gh workflow run accept.yml \
             -f ref=${{ github.ref }} \
